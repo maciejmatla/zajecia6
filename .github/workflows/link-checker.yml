@@ -1,17 +1,26 @@
-name: Documentation Checker
-
-# TRIGGER: Uruchomienie przy wypchnięciu zmian
-on: [push]
-
-# JOBS: Definicja zadań
+name: Quality Gate
+ 
+# Uruchom na push oraz przy otwarciu Pull Request
+on: [push, pull_request]
+ 
 jobs:
-  markdown-link-check:
-    runs-on: ubuntu-latest
-    steps:
-      # Krok 1: Pobranie kodu źródłowego
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Krok 2: Uruchomienie walidatora linków
-      - name: Check links in README
-        uses: gaurav-nelson/github-action-markdown-link-check@v1
+ # ZADANIE 1: Sprawdzanie linków
+ link-checker:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v3
+     - name: Check links
+       uses: gaurav-nelson/github-action-markdown-link-check@v1
+ 
+ # ZADANIE 2: Sprawdzanie składni
+ syntax-check:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v3
+      
+     - name: Markdown Lint
+       # Używamy gotowego lintera
+       uses: DavidAnson/markdownlint-cli2-action@v16
+       with:
+         globs: "**/*.md"
