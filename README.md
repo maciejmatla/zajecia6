@@ -1,10 +1,26 @@
-# Projekt Testowy CI/CD
-[![Documentation Checker](https://github.com/maciejmatla/zajecia6/actions/workflows/link-checker.yml/badge.svg)](https://github.com/maciejmatla/zajecia6/actions/workflows/link-checker.yml)
-Repozytorium szkoleniowe do nauki GitHub Actions.
-## Zasoby
-1. [Dokumentacja GitHub](https://docs.github.com)
-2. [Poprawiony link] (https://www.google.com)
-
-## Nowa sekcja (Test Lintera)
--Punkt pierwszy (brak spacji po myślniku to błąd w Markdown!)
--Punkt drugi
+name: Quality Gate
+ 
+# Uruchom na push oraz przy otwarciu Pull Request
+on: [push, pull_request]
+ 
+jobs:
+ # ZADANIE 1: Sprawdzanie linków
+ link-checker:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v3
+     - name: Check links
+       uses: gaurav-nelson/github-action-markdown-link-check@v1
+ 
+ # ZADANIE 2: Sprawdzanie składni
+ syntax-check:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v3
+      
+     - name: Markdown Lint
+       # Używamy gotowego lintera
+       uses: DavidAnson/markdownlint-cli2-action@v16
+       with:
+         globs: "**/*.md"
